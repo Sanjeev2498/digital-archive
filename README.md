@@ -86,8 +86,8 @@ Follow these steps to set up the application:
 
 ```bash
 # Using Git
-git clone <repository-url>
-cd indigenous-knowledge-archive
+git clone https://github.com/Sanjeev2498/digital-archive.git
+cd digital-archive
 
 # Or download and extract the ZIP file
 ```
@@ -313,8 +313,6 @@ indigenous-knowledge-archive/
 ├── package-lock.json                 # Locked dependency versions
 ├── jest.config.js                    # Jest testing configuration
 ├── README.md                         # This file
-├── SETUP.md                          # Detailed setup guide
-├── QUICK-START.md                    # Quick start alternatives
 └── ACCESSIBILITY_CHECKLIST.md        # Accessibility compliance checklist
 ```
 
@@ -628,7 +626,6 @@ The application uses property-based testing to verify correctness properties:
 1. Check if port 3306 is already in use
 2. Review MySQL error logs
 3. Consider using XAMPP as an alternative
-4. See `QUICK-START.md` for alternative setup options
 
 ## Contributing
 
@@ -646,4 +643,4 @@ ISC
 
 ---
 
-**Need Help?** Check `SETUP.md` for detailed setup instructions or `QUICK-START.md` for alternative setup options.
+**The Ancient Knowledge** - Preserving indigenous wisdom for future generations.
