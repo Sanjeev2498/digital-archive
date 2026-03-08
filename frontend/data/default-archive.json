@@ -1,0 +1,90 @@
+[
+  {
+    "id": "content_001",
+    "title": "Traditional Herbal Medicine for Common Ailments",
+    "category": "medicine",
+    "description": "Ancient healing practices using locally sourced herbs and plants for treating everyday health issues.",
+    "content": "Indigenous communities have long relied on herbal remedies passed down through generations. Common treatments include using neem leaves for skin conditions, turmeric for inflammation, ginger for digestive issues, and tulsi (holy basil) for respiratory problems. These remedies are prepared through various methods including decoctions, poultices, and infusions.",
+    "tags": ["herbs", "healing", "traditional", "natural medicine"],
+    "dateAdded": "2024-01-15T10:00:00Z",
+    "lastModified": "2024-01-15T10:00:00Z",
+    "author": "Elder Healer"
+  },
+  {
+    "id": "content_002",
+    "title": "Sustainable Crop Rotation Techniques",
+    "category": "agriculture",
+    "description": "Traditional farming methods that maintain soil fertility and prevent pest infestations naturally.",
+    "content": "Indigenous farmers have practiced crop rotation for centuries, alternating between nitrogen-fixing legumes and nutrient-demanding crops. This method maintains soil health without chemical fertilizers. The practice includes intercropping, companion planting, and allowing fields to lie fallow periodically. These techniques ensure sustainable food production for future generations.",
+    "tags": ["farming", "sustainability", "soil health", "organic"],
+    "dateAdded": "2024-01-20T14:30:00Z",
+    "lastModified": "2024-01-20T14:30:00Z",
+    "author": "Agricultural Elder"
+  },
+  {
+    "id": "content_003",
+    "title": "Harvest Festival Rituals and Ceremonies",
+    "category": "cultural",
+    "description": "Traditional celebrations marking the harvest season, expressing gratitude to nature and ancestors.",
+    "content": "Harvest festivals are central to indigenous culture, featuring communal feasts, traditional dances, and offerings to deities. These ceremonies strengthen community bonds and pass cultural values to younger generations. Rituals include lighting sacred fires, singing ancestral songs, and sharing the first fruits of the harvest with elders and those in need.",
+    "tags": ["festivals", "rituals", "community", "traditions"],
+    "dateAdded": "2024-02-01T09:00:00Z",
+    "lastModified": "2024-02-01T09:00:00Z",
+    "author": "Cultural Keeper"
+  },
+  {
+    "id": "content_004",
+    "title": "Oral Traditions and Storytelling",
+    "category": "heritage",
+    "description": "The art of preserving history, wisdom, and moral lessons through spoken narratives.",
+    "content": "Storytelling is the primary method of knowledge transmission in indigenous communities. Elders share creation myths, historical events, and moral tales that teach values like respect, courage, and harmony with nature. These stories are performed with specific gestures, songs, and sometimes musical instruments, making them memorable and engaging for all ages.",
+    "tags": ["stories", "oral history", "wisdom", "elders"],
+    "dateAdded": "2024-02-10T16:45:00Z",
+    "lastModified": "2024-02-10T16:45:00Z",
+    "author": "Story Keeper"
+  },
+  {
+    "id": "content_005",
+    "title": "Traditional Basket Weaving Techniques",
+    "category": "crafts",
+    "description": "Ancient art of creating functional and decorative baskets using natural fibers and traditional patterns.",
+    "content": "Basket weaving is both a practical skill and an art form. Artisans use locally sourced materials like bamboo, palm leaves, and grasses. Each pattern and design carries cultural significance, often representing clan symbols or natural elements. The craft requires patience and precision, with techniques passed from master weavers to apprentices over many years.",
+    "tags": ["weaving", "handicrafts", "artisan", "traditional art"],
+    "dateAdded": "2024-02-15T11:20:00Z",
+    "lastModified": "2024-02-15T11:20:00Z",
+    "author": "Master Weaver"
+  },
+  {
+    "id": "content_006",
+    "title": "Water Conservation in Arid Regions",
+    "category": "agriculture",
+    "description": "Indigenous methods for collecting, storing, and efficiently using water in dry climates.",
+    "content": "Communities in arid regions have developed sophisticated water management systems. Techniques include building check dams, creating rainwater harvesting structures, and using mulching to retain soil moisture. Traditional knowledge of underground water sources and seasonal patterns ensures sustainable water use even during droughts.",
+    "tags": ["water", "conservation", "sustainability", "drought management"],
+    "dateAdded": "2024-02-20T13:00:00Z",
+    "lastModified": "2024-02-20T13:00:00Z",
+    "author": "Water Elder"
+  },
+  {
+    "id": "content_007",
+    "title": "Natural Dyes from Plants and Minerals",
+    "category": "crafts",
+    "description": "Traditional methods of extracting and using natural colors for textiles and artwork.",
+    "content": "Indigenous artisans create vibrant dyes from plants, roots, bark, and minerals. Indigo produces deep blues, turmeric yields golden yellows, and madder root creates rich reds. The dyeing process involves mordants to fix colors and specific techniques to achieve different shades. These natural dyes are eco-friendly and produce unique, lasting colors.",
+    "tags": ["dyes", "natural colors", "textiles", "eco-friendly"],
+    "dateAdded": "2024-02-25T10:30:00Z",
+    "lastModified": "2024-02-25T10:30:00Z",
+    "author": "Textile Artist"
+  },
+  {
+    "id": "content_008",
+    "title": "Coming of Age Ceremonies",
+    "category": "cultural",
+    "description": "Rituals marking the transition from childhood to adulthood in indigenous communities.",
+    "content": "Coming of age ceremonies are significant cultural events that prepare young people for adult responsibilities. These rituals often include periods of isolation, teachings from elders, physical challenges, and community celebrations. Participants learn about their cultural identity, responsibilities to the community, and traditional knowledge essential for adult life.",
+    "tags": ["rituals", "youth", "traditions", "community"],
+    "dateAdded": "2024-03-01T15:00:00Z",
+    "lastModified": "2024-03-01T15:00:00Z",
+    "author": "Ceremony Leader"
+  }
+]

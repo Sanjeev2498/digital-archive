@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Register for Digital Archive of Indigenous Knowledge">
+  <title>Register - Indigenous Knowledge Archive</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Skip to main content link for keyboard navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header role="banner">
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo" aria-label="Indigenous Knowledge Archive Home">Indigenous Knowledge Archive</a>
+        <nav role="navigation" aria-label="Main navigation">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/archive">Archive</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register" aria-current="page">Register</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" role="main">
+    <section class="mt-xl mb-xl">
+      <div class="container container-sm">
+        <div class="card">
+          <div class="card-header text-center">
+            <h1>Create Account</h1>
+            <p>Join us in preserving indigenous knowledge</p>
+          </div>
+
+          <div class="card-body">
+            <!-- Success Message Container -->
+            <div id="success-message" class="alert alert-success hidden" role="alert" aria-live="polite"></div>
+
+            <!-- Error Message Container -->
+            <div id="error-message" class="alert alert-error hidden" role="alert" aria-live="polite"></div>
+
+            <!-- Registration Form -->
+            <form id="register-form" aria-label="Registration form">
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input 
+                  type="text" 
+                  id="name" 
+                  name="name" 
+                  placeholder="Enter your full name"
+                  required
+                  autocomplete="name"
+                  maxlength="100"
+                  aria-required="true"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  placeholder="Enter your email"
+                  required
+                  autocomplete="email"
+                  aria-required="true"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  placeholder="Enter your password"
+                  required
+                  autocomplete="new-password"
+                  minlength="8"
+                  aria-required="true"
+                  aria-describedby="password-help"
+                >
+                <small id="password-help" style="color: var(--text-secondary);">
+                  Password must be at least 8 characters with uppercase, lowercase, and number
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input 
+                  type="password" 
+                  id="confirm-password" 
+                  name="confirm-password" 
+                  placeholder="Confirm your password"
+                  required
+                  autocomplete="new-password"
+                  aria-required="true"
+                >
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block" aria-label="Submit registration form">
+                Create Account
+              </button>
+            </form>
+          </div>
+
+          <div class="card-footer text-center">
+            <p>Already have an account? <a href="/login" aria-label="Go to login page">Login here</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay hidden" role="status" aria-live="polite" aria-label="Loading">
+    <div class="loading"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <div class="container">
+      <p>&copy; 2024 Digital Archive of Indigenous Knowledge. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="js/ui.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>
