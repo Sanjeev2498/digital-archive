@@ -94,7 +94,7 @@
       <div class="header-content">
         <a href="/" class="logo" aria-label="Indigenous Knowledge Archive Home">Indigenous Knowledge Archive</a>
         <nav role="navigation" aria-label="Main navigation">
-          <ul>
+          <ul id="main-nav">
             <li><a href="/">Home</a></li>
             <li><a href="/archive">Archive</a></li>
             <li><a href="/admin" aria-current="page">Admin</a></li>
@@ -223,6 +223,17 @@
             name="tags" 
             placeholder="e.g., herbs, healing, traditional"
           >
+        </div>
+
+        <div class="form-group">
+          <label for="content-image">Image URL (optional)</label>
+          <input 
+            type="url" 
+            id="content-image" 
+            name="image_url" 
+            placeholder="https://example.com/image.jpg"
+          >
+          <small style="color:var(--text-muted);font-size:0.85rem;">Paste a URL to an image related to this content</small>
         </div>
 
         <div class="flex gap-md">

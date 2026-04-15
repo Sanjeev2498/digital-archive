@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const { testConnection } = require('./db');
 const authRoutes = require('./routes/auth.routes');
+const contentRoutes = require('./routes/content.routes');
 const { csrfTokenGenerator, csrfProtection, csrfErrorHandler } = require('./middleware/csrf.middleware');
 
 const app = express();
@@ -45,6 +46,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // API Routes - CSRF token endpoint is unprotected, other routes are protected
 app.use('/api/auth', authRoutes);
+app.use('/api/content', contentRoutes);
 
 // Serve HTML pages
 app.get('/', (req, res) => {

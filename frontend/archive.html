@@ -17,7 +17,7 @@
       <div class="header-content">
         <a href="/" class="logo" aria-label="Indigenous Knowledge Archive Home">Indigenous Knowledge Archive</a>
         <nav role="navigation" aria-label="Main navigation">
-          <ul>
+          <ul id="main-nav">
             <li><a href="/">Home</a></li>
             <li><a href="/archive" aria-current="page">Archive</a></li>
             <li><span id="user-name" style="color: var(--accent);" aria-label="Current user"></span></li>
@@ -33,6 +33,22 @@
     <section class="mt-lg mb-xl">
       <div class="container">
         <h1 class="text-center mb-lg">Indigenous Knowledge Archive</h1>
+
+        <!-- Stats Panel -->
+        <div class="grid grid-3 mb-lg" id="stats-panel" style="display:none;">
+          <div class="card" style="text-align:center;background:linear-gradient(135deg, var(--forest-light), var(--forest));">
+            <h3 style="color:var(--cream);font-size:2.5rem;margin:0;" id="stat-total">0</h3>
+            <p style="color:var(--wheat);margin:0;font-size:0.9rem;">Total Entries</p>
+          </div>
+          <div class="card" style="text-align:center;background:linear-gradient(135deg, var(--moss), var(--forest-mid));">
+            <h3 style="color:var(--cream);font-size:2.5rem;margin:0;" id="stat-categories">0</h3>
+            <p style="color:var(--wheat);margin:0;font-size:0.9rem;">Categories</p>
+          </div>
+          <div class="card" style="text-align:center;background:linear-gradient(135deg, var(--clay), var(--bark));">
+            <h3 style="color:var(--cream);font-size:2.5rem;margin:0;" id="stat-views">0</h3>
+            <p style="color:var(--wheat);margin:0;font-size:0.9rem;">Total Views</p>
+          </div>
+        </div>
 
         <!-- Search and Filter Section -->
         <div class="card mb-lg">
@@ -51,24 +67,12 @@
 
             <!-- Category Filters -->
             <div class="flex flex-wrap gap-sm mt-md" role="group" aria-label="Category filters">
-              <button class="btn btn-outline btn-filter active" data-category="all" aria-pressed="true">
-                All
-              </button>
-              <button class="btn btn-outline btn-filter" data-category="medicine" aria-pressed="false">
-                Medicine
-              </button>
-              <button class="btn btn-outline btn-filter" data-category="agriculture" aria-pressed="false">
-                Agriculture
-              </button>
-              <button class="btn btn-outline btn-filter" data-category="cultural" aria-pressed="false">
-                Cultural
-              </button>
-              <button class="btn btn-outline btn-filter" data-category="heritage" aria-pressed="false">
-                Heritage
-              </button>
-              <button class="btn btn-outline btn-filter" data-category="crafts" aria-pressed="false">
-                Crafts
-              </button>
+              <button class="btn btn-filter active" data-category="all" aria-pressed="true">🌍 All</button>
+              <button class="btn btn-filter" data-category="medicine" aria-pressed="false">🌿 Medicine</button>
+              <button class="btn btn-filter" data-category="agriculture" aria-pressed="false">🌾 Agriculture</button>
+              <button class="btn btn-filter" data-category="cultural" aria-pressed="false">🎭 Cultural</button>
+              <button class="btn btn-filter" data-category="heritage" aria-pressed="false">📜 Heritage</button>
+              <button class="btn btn-filter" data-category="crafts" aria-pressed="false">🎨 Crafts</button>
             </div>
           </div>
         </div>

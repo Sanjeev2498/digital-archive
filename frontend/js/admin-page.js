@@ -1,342 +1,180 @@
-/**
- * Admin Page Script
- * Handles admin dashboard functionality and content management
- */
-
 document.addEventListener('DOMContentLoaded', async () => {
-  // Check admin authentication
   const isAdmin = await AuthService.requireAdmin();
   if (!isAdmin) return;
 
-  // Get DOM elements
-  const contentTableBody = document.getElementById('content-table-body');
+  const tableBody = document.getElementById('content-table-body');
   const emptyState = document.getElementById('empty-state');
   const loadingState = document.getElementById('loading-state');
   const addNewBtn = document.getElementById('add-new-btn');
   const userNameSpan = document.getElementById('user-name');
   const logoutBtn = document.getElementById('logout-btn');
 
-  // Modal elements
   const contentModal = document.getElementById('content-modal');
   const modalTitle = document.getElementById('modal-title');
   const contentForm = document.getElementById('content-form');
   const modalCloseBtn = document.getElementById('modal-close-btn');
   const modalCancelBtn = document.getElementById('modal-cancel-btn');
 
-  // Delete modal elements
   const deleteModal = document.getElementById('delete-modal');
   const deleteModalCloseBtn = document.getElementById('delete-modal-close-btn');
   const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
   const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
 
-  // State
-  let allContent = [];
   let currentEditId = null;
   let currentDeleteId = null;
 
-  // Display user name
   const user = AuthService.getCurrentUser();
-  if (user && userNameSpan) {
-    userNameSpan.textContent = user.name;
-  }
+  if (user && userNameSpan) userNameSpan.textContent = user.name;
 
-  // Load and display content
-  async function loadContent() {
-    try {
-      UIService.showLoading();
-      loadingState.classList.remove('hidden');
-      contentTableBody.innerHTML = '';
-      emptyState.classList.add('hidden');
-
-      allContent = await ArchiveService.loadContent();
-
-      if (allContent.length === 0) {
-        emptyState.classList.remove('hidden');
-      } else {
-        contentTableBody.innerHTML = UIService.renderAdminTable(allContent);
-        attachRowEventListeners();
-      }
-
-      loadingState.classList.add('hidden');
-      UIService.hideLoading();
-    } catch (error) {
-      console.error('Error loading content:', error);
-      loadingState.classList.add('hidden');
-      UIService.hideLoading();
-      
-      // Display user-friendly error message
-      if (error.message && error.message.includes('Network error')) {
-        UIService.showError('Network error. Please check your connection and try again.');
-      } else {
-        UIService.showError('Failed to load content. Please try again.');
-      }
+  // Update navigation
+  const mainNav = document.getElementById('main-nav');
+  if (user && mainNav) {
+    const navItems = [];
+    navItems.push('<li><a href="/">Home</a></li>');
+    navItems.push('<li><a href="/archive">Archive</a></li>');
+    navItems.push('<li><a href="/admin" aria-current="page">Admin</a></li>');
+    navItems.push(`<li><span id="user-name" style="color: var(--accent);">${user.name}</span></li>`);
+    navItems.push('<li><a href="#" id="logout-btn">Logout</a></li>');
+    mainNav.innerHTML = navItems.join('');
+    
+    // Re-attach logout listener
+    const newLogoutBtn = document.getElementById('logout-btn');
+    if (newLogoutBtn) {
+      newLogoutBtn.addEventListener('click', async e => {
+        e.preventDefault();
+        await AuthService.logout();
+        window.location.href = '/login';
+      });
     }
   }
 
-  // Attach event listeners to table rows
-  function attachRowEventListeners() {
-    // Edit buttons
-    document.querySelectorAll('.btn-edit').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        openEditModal(id);
-      });
-    });
+  async function loadContent() {
+    loadingState.classList.remove('hidden');
+    tableBody.innerHTML = '';
+    emptyState.classList.add('hidden');
+    try {
+      const items = await ArchiveService.loadContent();
+      loadingState.classList.add('hidden');
+      if (items.length === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        tableBody.innerHTML = renderRows(items);
+        attachRowListeners();
+      }
+    } catch (err) {
+      loadingState.classList.add('hidden');
+      UIService.showError('Failed to load content.');
+    }
+  }
 
-    // Delete buttons
+  function renderRows(items) {
+    return items.map(item => `
+      <tr>
+        <td>${UIService.escapeHtml(item.title)}</td>
+        <td><span style="background:var(--secondary);color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.875rem;">${UIService.escapeHtml(item.category)}</span></td>
+        <td>${new Date(item.created_at).toLocaleDateString()}</td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn btn-secondary btn-edit" data-id="${item.id}" aria-label="Edit ${UIService.escapeHtml(item.title)}">Edit</button>
+            <button class="btn btn-error btn-delete" data-id="${item.id}" aria-label="Delete ${UIService.escapeHtml(item.title)}">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function attachRowListeners() {
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+      btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+    });
     document.querySelectorAll('.btn-delete').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        openDeleteModal(id);
-      });
+      btn.addEventListener('click', () => openDeleteModal(btn.dataset.id));
     });
   }
 
-  // Open add modal
   function openAddModal() {
     currentEditId = null;
     modalTitle.textContent = 'Add New Content';
     contentForm.reset();
     document.getElementById('content-id').value = '';
     contentModal.classList.add('active');
-    
-    // Set focus to first input for accessibility
-    setTimeout(() => {
-      document.getElementById('content-title').focus();
-    }, 100);
+    document.getElementById('content-title').focus();
   }
 
-  // Open edit modal
   async function openEditModal(id) {
-    currentEditId = id;
-    modalTitle.textContent = 'Edit Content';
-    
     try {
-      UIService.showLoading();
-      const item = await ArchiveService.getContentById(id);
-      UIService.hideLoading();
-      
-      if (item) {
-        document.getElementById('content-id').value = item.id;
-        document.getElementById('content-title').value = item.title;
-        document.getElementById('content-category').value = item.category;
-        document.getElementById('content-description').value = item.description;
-        document.getElementById('content-body').value = item.content;
-        document.getElementById('content-tags').value = item.tags ? item.tags.join(', ') : '';
-        
-        contentModal.classList.add('active');
-        
-        // Set focus to first input for accessibility
-        setTimeout(() => {
-          document.getElementById('content-title').focus();
-        }, 100);
-      } else {
-        UIService.showError('Content not found.');
-      }
-    } catch (error) {
-      UIService.hideLoading();
-      
-      // Display user-friendly error message
-      if (error.message && error.message.includes('Network error')) {
-        UIService.showError('Network error. Please check your connection and try again.');
-      } else {
-        UIService.showError('Failed to load content for editing. Please try again.');
-      }
+      const item = await ArchiveService.getOne(id);
+      currentEditId = id;
+      modalTitle.textContent = 'Edit Content';
+      document.getElementById('content-id').value = item.id;
+      document.getElementById('content-title').value = item.title;
+      document.getElementById('content-category').value = item.category;
+      document.getElementById('content-description').value = item.description;
+      document.getElementById('content-body').value = item.content;
+      document.getElementById('content-tags').value = Array.isArray(item.tags) ? item.tags.join(', ') : (item.tags || '');
+      document.getElementById('content-image').value = item.image_url || '';
+      contentModal.classList.add('active');
+      document.getElementById('content-title').focus();
+    } catch (err) {
+      UIService.showError('Failed to load item for editing.');
     }
   }
 
-  // Close content modal
-  function closeContentModal() {
-    contentModal.classList.remove('active');
-    contentForm.reset();
-    currentEditId = null;
-  }
-
-  // Open delete modal
   function openDeleteModal(id) {
     currentDeleteId = id;
     deleteModal.classList.add('active');
-    
-    // Set focus to cancel button for safety (prevents accidental deletion)
-    setTimeout(() => {
-      cancelDeleteBtn.focus();
-    }, 100);
+    confirmDeleteBtn.focus();
   }
 
-  // Close delete modal
-  function closeDeleteModal() {
+  function closeModals() {
+    contentModal.classList.remove('active');
     deleteModal.classList.remove('active');
+    currentEditId = null;
     currentDeleteId = null;
   }
 
-  // Handle form submission
-  contentForm.addEventListener('submit', async (e) => {
+  contentForm.addEventListener('submit', async e => {
     e.preventDefault();
-
-    // Get form values
-    const title = document.getElementById('content-title').value.trim();
-    const category = document.getElementById('content-category').value;
-    const description = document.getElementById('content-description').value.trim();
-    const content = document.getElementById('content-body').value.trim();
-    const tagsInput = document.getElementById('content-tags').value.trim();
-    const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
-
-    // Validate
-    if (!title || !category || !description || !content) {
-      UIService.showError('Please fill in all required fields');
-      return;
-    }
-
+    const tagsRaw = document.getElementById('content-tags').value;
+    const payload = {
+      title: document.getElementById('content-title').value.trim(),
+      category: document.getElementById('content-category').value,
+      description: document.getElementById('content-description').value.trim(),
+      content: document.getElementById('content-body').value.trim(),
+      tags: tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [],
+      image_url: document.getElementById('content-image').value.trim() || null
+    };
     try {
-      UIService.showLoading();
-
       if (currentEditId) {
-        // Update existing content
-        await ArchiveService.updateContent(currentEditId, {
-          title,
-          category,
-          description,
-          content,
-          tags
-        });
-        UIService.showSuccess('Content updated successfully');
+        await ArchiveService.update(currentEditId, payload);
+        UIService.showSuccess('Content updated successfully.');
       } else {
-        // Add new content
-        await ArchiveService.addContent({
-          title,
-          category,
-          description,
-          content,
-          tags,
-          author: user.name
-        });
-        UIService.showSuccess('Content added successfully');
+        await ArchiveService.create(payload);
+        UIService.showSuccess('Content added successfully.');
       }
-
-      UIService.hideLoading();
-      closeContentModal();
+      closeModals();
       await loadContent();
-    } catch (error) {
-      UIService.hideLoading();
-      
-      // Display user-friendly error message
-      if (error.message && error.message.includes('Network error')) {
-        UIService.showError('Network error. Please check your connection and try again.');
-      } else {
-        UIService.showError(error.message || 'Failed to save content. Please try again.');
-      }
+    } catch (err) {
+      UIService.showError(err.message || 'Failed to save content.');
     }
   });
 
-  // Handle delete confirmation
   confirmDeleteBtn.addEventListener('click', async () => {
-    if (!currentDeleteId) return;
-
     try {
-      UIService.showLoading();
-      await ArchiveService.deleteContent(currentDeleteId);
-      UIService.hideLoading();
-      UIService.showSuccess('Content deleted successfully');
-      closeDeleteModal();
+      await ArchiveService.remove(currentDeleteId);
+      UIService.showSuccess('Content deleted.');
+      closeModals();
       await loadContent();
-    } catch (error) {
-      UIService.hideLoading();
-      
-      // Display user-friendly error message
-      if (error.message && error.message.includes('Network error')) {
-        UIService.showError('Network error. Please check your connection and try again.');
-      } else {
-        UIService.showError(error.message || 'Failed to delete content. Please try again.');
-      }
+    } catch (err) {
+      UIService.showError('Failed to delete content.');
     }
   });
 
-  // Event listeners
   addNewBtn.addEventListener('click', openAddModal);
-  modalCloseBtn.addEventListener('click', closeContentModal);
-  modalCancelBtn.addEventListener('click', closeContentModal);
-  deleteModalCloseBtn.addEventListener('click', closeDeleteModal);
-  cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+  modalCloseBtn.addEventListener('click', closeModals);
+  modalCancelBtn.addEventListener('click', closeModals);
+  deleteModalCloseBtn.addEventListener('click', closeModals);
+  cancelDeleteBtn.addEventListener('click', closeModals);
 
-  // Close modals on outside click
-  contentModal.addEventListener('click', (e) => {
-    if (e.target === contentModal) {
-      closeContentModal();
-    }
-  });
-
-  deleteModal.addEventListener('click', (e) => {
-    if (e.target === deleteModal) {
-      closeDeleteModal();
-    }
-  });
-
-  // Keyboard navigation - Escape key to close modals
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (contentModal.classList.contains('active')) {
-        closeContentModal();
-      }
-      if (deleteModal.classList.contains('active')) {
-        closeDeleteModal();
-      }
-    }
-  });
-
-  // Trap focus within modal when open
-  function trapFocus(modal) {
-    const focusableElements = modal.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    modal.addEventListener('keydown', (e) => {
-      if (e.key === 'Tab') {
-        if (e.shiftKey) {
-          if (document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement.focus();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement.focus();
-          }
-        }
-      }
-    });
-  }
-
-  // Apply focus trap to modals
-  trapFocus(contentModal);
-  trapFocus(deleteModal);
-
-  // Handle logout
-  logoutBtn.addEventListener('click', async (e) => {
-    e.preventDefault();
-    
-    try {
-      UIService.showLoading();
-      await AuthService.logout();
-      UIService.hideLoading();
-      window.location.href = '/login';
-    } catch (error) {
-      console.error('Logout error:', error);
-      UIService.hideLoading();
-      
-      // Display error but still redirect to login
-      if (error.message && error.message.includes('Network error')) {
-        UIService.showError('Network error during logout. Redirecting to login...');
-      }
-      
-      // Redirect to login after brief delay
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 1000);
-    }
-  });
-
-  // Initial load
   await loadContent();
 });

@@ -88,33 +88,29 @@ const UIService = {
    * @returns {string} HTML string of rendered cards
    */
   renderArchiveItems(items) {
-    if (!items || items.length === 0) {
-      return '';
-    }
-
+    if (!items || items.length === 0) return '';
+    const categoryEmoji = { medicine: '🌿', agriculture: '🌾', cultural: '🎭', heritage: '📜', crafts: '🎨' };
     return items.map(item => `
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">${this.escapeHtml(item.title)}</h3>
-          <span class="badge" style="background-color: var(--secondary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">
-            ${this.escapeHtml(item.category)}
+          <span class="category-badge badge-${item.category}">
+            ${categoryEmoji[item.category] || ''} ${this.escapeHtml(item.category)}
           </span>
         </div>
         <div class="card-body">
           <p>${this.escapeHtml(item.description)}</p>
           ${item.tags && item.tags.length > 0 ? `
-            <div class="mt-md">
+            <div class="mt-md flex flex-wrap gap-sm">
               ${item.tags.map(tag => `
-                <span style="background-color: var(--surface-dark); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-right: 0.25rem;">
-                  ${this.escapeHtml(tag)}
-                </span>
-              `).join('')}
-            </div>
-          ` : ''}
+                <span style="background:var(--surface-dark);color:var(--text-muted);padding:0.2rem 0.6rem;border-radius:var(--radius-full);font-size:0.75rem;border:1px solid var(--border-light);">
+                  #${this.escapeHtml(tag)}
+                </span>`).join('')}
+            </div>` : ''}
         </div>
         <div class="card-footer">
-          <small style="color: var(--text-secondary);">
-            Added: ${new Date(item.dateAdded).toLocaleDateString()}
+          <small style="color:var(--text-muted);">
+            By ${this.escapeHtml(item.author_name || 'Admin')} &bull; ${new Date(item.created_at || item.dateAdded).toLocaleDateString('en-IN', {year:'numeric',month:'short',day:'numeric'})}
           </small>
         </div>
       </div>
@@ -127,27 +123,17 @@ const UIService = {
    * @returns {string} HTML string of table rows
    */
   renderAdminTable(items) {
-    if (!items || items.length === 0) {
-      return '';
-    }
-
+    if (!items || items.length === 0) return '';
+    const categoryEmoji = { medicine: '🌿', agriculture: '🌾', cultural: '🎭', heritage: '📜', crafts: '🎨' };
     return items.map(item => `
       <tr>
         <td>${this.escapeHtml(item.title)}</td>
-        <td>
-          <span class="badge" style="background-color: var(--secondary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">
-            ${this.escapeHtml(item.category)}
-          </span>
-        </td>
-        <td>${new Date(item.dateAdded).toLocaleDateString()}</td>
+        <td><span class="category-badge badge-${item.category}">${categoryEmoji[item.category] || ''} ${this.escapeHtml(item.category)}</span></td>
+        <td>${new Date(item.created_at || item.dateAdded).toLocaleDateString('en-IN', {year:'numeric',month:'short',day:'numeric'})}</td>
         <td>
           <div class="action-buttons">
-            <button class="btn btn-secondary btn-edit" data-id="${item.id}" aria-label="Edit ${this.escapeHtml(item.title)}">
-              Edit
-            </button>
-            <button class="btn btn-error btn-delete" data-id="${item.id}" aria-label="Delete ${this.escapeHtml(item.title)}">
-              Delete
-            </button>
+            <button class="btn btn-secondary btn-edit" data-id="${item.id}" aria-label="Edit ${this.escapeHtml(item.title)}">Edit</button>
+            <button class="btn btn-error btn-delete" data-id="${item.id}" aria-label="Delete ${this.escapeHtml(item.title)}">Delete</button>
           </div>
         </td>
       </tr>
